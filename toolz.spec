@@ -4,15 +4,15 @@
 #
 Name     : toolz
 Version  : 0.9.0
-Release  : 1
+Release  : 2
 URL      : https://files.pythonhosted.org/packages/14/d0/a73c15bbeda3d2e7b381a36afb0d9cd770a9f4adc5d1532691013ba881db/toolz-0.9.0.tar.gz
 Source0  : https://files.pythonhosted.org/packages/14/d0/a73c15bbeda3d2e7b381a36afb0d9cd770a9f4adc5d1532691013ba881db/toolz-0.9.0.tar.gz
 Summary  : List processing tools and functional utilities
 Group    : Development/Tools
 License  : BSD-3-Clause
-Requires: toolz-python3
-Requires: toolz-license
-Requires: toolz-python
+Requires: toolz-license = %{version}-%{release}
+Requires: toolz-python = %{version}-%{release}
+Requires: toolz-python3 = %{version}-%{release}
 BuildRequires : buildreq-distutils3
 
 %description
@@ -33,7 +33,7 @@ license components for the toolz package.
 %package python
 Summary: python components for the toolz package.
 Group: Default
-Requires: toolz-python3
+Requires: toolz-python3 = %{version}-%{release}
 
 %description python
 python components for the toolz package.
@@ -56,13 +56,13 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1537205046
+export SOURCE_DATE_EPOCH=1542925171
 python3 setup.py build
 
 %install
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/toolz
-cp LICENSE.txt %{buildroot}/usr/share/doc/toolz/LICENSE.txt
+mkdir -p %{buildroot}/usr/share/package-licenses/toolz
+cp LICENSE.txt %{buildroot}/usr/share/package-licenses/toolz/LICENSE.txt
 python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
@@ -72,8 +72,8 @@ echo ----[ mark ]----
 %defattr(-,root,root,-)
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/toolz/LICENSE.txt
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/toolz/LICENSE.txt
 
 %files python
 %defattr(-,root,root,-)
