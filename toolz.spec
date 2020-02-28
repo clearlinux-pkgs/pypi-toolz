@@ -4,7 +4,7 @@
 #
 Name     : toolz
 Version  : 0.10.0
-Release  : 11
+Release  : 12
 URL      : https://files.pythonhosted.org/packages/22/8e/037b9ba5c6a5739ef0dcde60578c64d49f45f64c5e5e886531bfbc39157f/toolz-0.10.0.tar.gz
 Source0  : https://files.pythonhosted.org/packages/22/8e/037b9ba5c6a5739ef0dcde60578c64d49f45f64c5e5e886531bfbc39157f/toolz-0.10.0.tar.gz
 Summary  : List processing tools and functional utilities
@@ -18,8 +18,136 @@ BuildRequires : buildreq-distutils3
 %description
 Toolz
 =====
+
 |Build Status| |Coverage Status| |Version Status|
+
 A set of utility functions for iterators, functions, and dictionaries.
+
+See the PyToolz documentation at https://toolz.readthedocs.io
+
+LICENSE
+-------
+
+New BSD. See `License File <https://github.com/pytoolz/toolz/blob/master/LICENSE.txt>`__.
+
+Install
+-------
+
+``toolz`` is on the Python Package Index (PyPI):
+
+::
+
+    pip install toolz
+
+Structure and Heritage
+----------------------
+
+``toolz`` is implemented in three parts:
+
+|literal itertoolz|_, for operations on iterables. Examples: ``groupby``,
+``unique``, ``interpose``,
+
+|literal functoolz|_, for higher-order functions. Examples: ``memoize``,
+``curry``, ``compose``,
+
+|literal dicttoolz|_, for operations on dictionaries. Examples: ``assoc``,
+``update-in``, ``merge``.
+
+.. |literal itertoolz| replace:: ``itertoolz``
+.. _literal itertoolz: https://github.com/pytoolz/toolz/blob/master/toolz/itertoolz.py
+
+.. |literal functoolz| replace:: ``functoolz``
+.. _literal functoolz: https://github.com/pytoolz/toolz/blob/master/toolz/functoolz.py
+
+.. |literal dicttoolz| replace:: ``dicttoolz``
+.. _literal dicttoolz: https://github.com/pytoolz/toolz/blob/master/toolz/dicttoolz.py
+
+These functions come from the legacy of functional languages for list
+processing. They interoperate well to accomplish common complex tasks.
+
+Read our `API
+Documentation <https://toolz.readthedocs.io/en/latest/api.html>`__ for
+more details.
+
+Example
+-------
+
+This builds a standard wordcount function from pieces within ``toolz``:
+
+.. code:: python
+
+    >>> def stem(word):
+    ...     """ Stem word to primitive form """
+    ...     return word.lower().rstrip(",.!:;'-\"").lstrip("'\"")
+
+    >>> from toolz import compose, frequencies, partial
+    >>> from toolz.curried import map
+    >>> wordcount = compose(frequencies, map(stem), str.split)
+
+    >>> sentence = "This cat jumped over this other cat!"
+    >>> wordcount(sentence)
+    {'this': 2, 'cat': 2, 'jumped': 1, 'over': 1, 'other': 1}
+
+Dependencies
+------------
+
+``toolz`` supports Python 2.7 and Python 3.4+ with a common codebase.
+It is pure Python and requires no dependencies beyond the standard
+library.
+
+It is, in short, a lightweight dependency.
+
+
+CyToolz
+-------
+
+The ``toolz`` project has been reimplemented in `Cython <http://cython.org>`__.
+The ``cytoolz`` project is a drop-in replacement for the Pure Python
+implementation.
+See `CyToolz GitHub Page <https://github.com/pytoolz/cytoolz/>`__ for more
+details.
+
+See Also
+--------
+
+-  `Underscore.js <https://underscorejs.org/>`__: A similar library for
+   JavaScript
+-  `Enumerable <https://ruby-doc.org/core-2.0.0/Enumerable.html>`__: A
+   similar library for Ruby
+-  `Clojure <https://clojure.org/>`__: A functional language whose
+   standard library has several counterparts in ``toolz``
+-  `itertools <https://docs.python.org/2/library/itertools.html>`__: The
+   Python standard library for iterator tools
+-  `functools <https://docs.python.org/2/library/functools.html>`__: The
+   Python standard library for function tools
+
+Contributions Welcome
+---------------------
+
+``toolz`` aims to be a repository for utility functions, particularly
+those that come from the functional programming and list processing
+traditions. We welcome contributions that fall within this scope.
+
+We also try to keep the API small to keep ``toolz`` manageable.  The ideal
+contribution is significantly different from existing functions and has
+precedent in a few other functional systems.
+
+Please take a look at our
+`issue page <https://github.com/pytoolz/toolz/issues>`__
+for contribution ideas.
+
+Community
+---------
+
+See our `mailing list <https://groups.google.com/forum/#!forum/pytoolz>`__.
+We're friendly.
+
+.. |Build Status| image:: https://travis-ci.org/pytoolz/toolz.svg?branch=master
+   :target: https://travis-ci.org/pytoolz/toolz
+.. |Coverage Status| image:: https://coveralls.io/repos/pytoolz/toolz/badge.svg?branch=master
+   :target: https://coveralls.io/r/pytoolz/toolz
+.. |Version Status| image:: https://badge.fury.io/py/toolz.svg
+   :target: https://badge.fury.io/py/toolz
 
 %package license
 Summary: license components for the toolz package.
@@ -42,6 +170,7 @@ python components for the toolz package.
 Summary: python3 components for the toolz package.
 Group: Default
 Requires: python3-core
+Provides: pypi(toolz)
 
 %description python3
 python3 components for the toolz package.
@@ -49,13 +178,15 @@ python3 components for the toolz package.
 
 %prep
 %setup -q -n toolz-0.10.0
+cd %{_builddir}/toolz-0.10.0
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1562896360
+export SOURCE_DATE_EPOCH=1582909202
+# -Werror is for werrorists
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -71,7 +202,7 @@ python3 setup.py build
 export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/toolz
-cp LICENSE.txt %{buildroot}/usr/share/package-licenses/toolz/LICENSE.txt
+cp %{_builddir}/toolz-0.10.0/LICENSE.txt %{buildroot}/usr/share/package-licenses/toolz/78653a88ec8550f2d7425fac201e6fa43be4d1dd
 python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
@@ -82,7 +213,7 @@ echo ----[ mark ]----
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/toolz/LICENSE.txt
+/usr/share/package-licenses/toolz/78653a88ec8550f2d7425fac201e6fa43be4d1dd
 
 %files python
 %defattr(-,root,root,-)
