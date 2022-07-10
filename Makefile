@@ -1,5 +1,5 @@
 PKG_NAME := pypi-toolz
-URL = https://files.pythonhosted.org/packages/5a/f3/f8c3d075da8d949b12fb12ef934ee12fcce369ff83b60253fc2833f8901c/toolz-0.11.2.tar.gz
+URL = https://files.pythonhosted.org/packages/cf/05/2008534bbaa716b46a2d795d7b54b999d0f7638fbb9ed0b6e87bfa934f84/toolz-0.12.0.tar.gz
 ARCHIVES = 
 
 include ../common/Makefile.common
