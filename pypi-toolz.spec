@@ -7,7 +7,7 @@
 #
 Name     : pypi-toolz
 Version  : 1.0.0
-Release  : 45
+Release  : 46
 URL      : https://files.pythonhosted.org/packages/8a/0b/d80dfa675bf592f636d1ea0b835eab4ec8df6e9415d8cfd766df54456123/toolz-1.0.0.tar.gz
 Source0  : https://files.pythonhosted.org/packages/8a/0b/d80dfa675bf592f636d1ea0b835eab4ec8df6e9415d8cfd766df54456123/toolz-1.0.0.tar.gz
 Summary  : List processing tools and functional utilities
